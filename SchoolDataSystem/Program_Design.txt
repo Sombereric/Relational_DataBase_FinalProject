@@ -1,0 +1,44 @@
+﻿Program Layout
+
+A main menu that allows the user to select each table type to edit
+
+example main menu
+
+------School Name------
+--student--enrollment--
+--Program--EmrContact--
+--------Course---------
+
+this will be buttons for the five tables one can edit, and lead them to submenus for each button. 
+notes:
+	perhaps we can add a exit button or about button as well much like norberts assignments
+	this is going to be the main hub for the program so nothing will be loaded
+
+Sub Menus
+
+Each table will get a menu that is similar to the other.
+basically they will all contain the same format
+
+Sub Menu example
+
+--------------------------------------
+-[                ]----Where data-----
+-[ Table of data  ]----is updated-----
+-[                ]-------------------
+-[                ]--BackBtn--update--
+---------------------create--delete---
+--------------------------------------
+
+notes:
+	table of data:
+		each table of data will have only the colomns of the table it is editing within the database
+		Example: course will have 3 columns. id, section coursename.
+		then when you click on a item within the table of data that data will populate the text boxes on the right
+		which will then allow you to edit and delete or create new.
+the back button will return back to the main menu which will then have a close or exit program button
+no need for another about box.
+perhaps having the program name still visible will be useful but its hard to say.
+
+
+I will attempt to have one of the menus done as to allow you to see the menthod we are using for data editing and manipulation
+this will make it so the ui and back end program works correctly and easier to debug
