@@ -34,7 +34,7 @@ namespace SchoolDataSystem
             this.Show();
         }
 
-        private void btnPrograms_Click(object sender, RoutedEventArgs e)
+        private void btnProgram_Click(object sender, RoutedEventArgs e)
         {
             ProgramTable programWindow = new ProgramTable();
             this.Hide();
