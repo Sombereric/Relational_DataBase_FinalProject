@@ -34,9 +34,26 @@ namespace SchoolDataSystem
 
         private void btnProgram_Click(object sender, RoutedEventArgs e)
         {
-            ProgramTable programWindow = new ProgramTable();
-            programWindow.ShowDialog();
+            ProgramTable programTable = new ProgramTable();
+            programTable.ShowDialog();
         }
 
+        private void btnEnrollment_Click(object sender, RoutedEventArgs e)
+        {
+            EnrollmentTable enrollmentTable = new EnrollmentTable();
+            enrollmentTable.ShowDialog();
+        }
+
+        private void btnCourses_Click(object sender, RoutedEventArgs e)
+        {
+            CourseTable courseTable = new CourseTable();
+            courseTable.ShowDialog();
+        }
+
+        private void btnEmergencyContact_Click(object sender, RoutedEventArgs e)
+        {
+            EmergencyContactTable emergencyTable = new EmergencyContactTable();
+            emergencyTable.ShowDialog();
+        }
     }
 }
