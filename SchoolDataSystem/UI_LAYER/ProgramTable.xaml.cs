@@ -25,9 +25,9 @@ namespace SchoolDataSystem.UI_LAYER
     //
     public partial class ProgramTable : Window
     {
-        private string connStr = "Server=localhost;Uid=root;Pwd=HelloWorld;DataBase=SchoolDataBase;";
-        private MySqlDataAdapter adapter;
-        private DataSet ds;
+        private string connectionString = "Server=localhost;Uid=root;Pwd=root;Database=SchoolDataBase;";
+        private MySqlDataAdapter dataAdapter;
+        private DataSet dataSet;
 
         //
         // FUNCTION : ProgramTable (constructor)
@@ -52,19 +52,19 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void LoadProgramTable()
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                conn.Open();
+                connection.Open();
 
                 // Retrieve all Program rows
-                adapter = new MySqlDataAdapter("SELECT * FROM Program", conn);
+                dataAdapter = new MySqlDataAdapter("SELECT * FROM Program", connection);
 
-                ds = new DataSet();
+                dataSet = new DataSet();
 
-                adapter.Fill(ds, "program");
+                dataAdapter.Fill(dataSet, "program");
 
                 // Bind the table to the DataGrid
-                dgPrograms.ItemsSource = ds.Tables["program"].DefaultView;
+                dgPrograms.ItemsSource = dataSet.Tables["program"].DefaultView;
             }
         }
 
@@ -80,14 +80,21 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            DataRow newRow = ds.Tables["program"].NewRow();
+            int programID;
 
-            // Insert values from UI
-            newRow["ProgramID"] = int.Parse(txtProgramID.Text);
+            if (!int.TryParse(txtProgramID.Text, out programID))
+            {
+                MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRow newRow = dataSet.Tables["program"].NewRow();
+
+            newRow["ProgramID"] = programID;
             newRow["ProgramName"] = txtProgramName.Text;
             newRow["ProgramType"] = txtProgramType.Text;
 
-            ds.Tables["program"].Rows.Add(newRow);
+            dataSet.Tables["program"].Rows.Add(newRow);
 
             SaveChanges();
             LoadProgramTable();
@@ -128,8 +135,8 @@ namespace SchoolDataSystem.UI_LAYER
             }
 
             // Get selected row and delete it
-            DataRowView drv = (DataRowView)dgPrograms.SelectedItem;
-            drv.Row.Delete();
+            DataRowView selectedDataRowView = (DataRowView)dgPrograms.SelectedItem;
+            selectedDataRowView.Row.Delete();
 
             SaveChanges();
             LoadProgramTable();
@@ -146,16 +153,16 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void SaveChanges()
         {
-            using (MySqlConnection conn = new MySqlConnection(connStr))
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
             {
-                conn.Open();
+                connection.Open();
 
-                adapter = new MySqlDataAdapter("SELECT * FROM Program", conn);
+                dataAdapter = new MySqlDataAdapter("SELECT * FROM Program", connection);
 
                 // Auto-generate UPDATE / INSERT / DELETE commands
-                MySqlCommandBuilder builder = new MySqlCommandBuilder(adapter);
+                MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(dataAdapter);
 
-                adapter.Update(ds, "program");
+                dataAdapter.Update(dataSet, "program");
             }
         }
 

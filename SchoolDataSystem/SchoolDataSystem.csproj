@@ -105,6 +105,15 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UI_LAYER\CourseTable.xaml.cs">
+      <DependentUpon>CourseTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI_LAYER\EmergencyContactTable.xaml.cs">
+      <DependentUpon>EmergencyContactTable.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="UI_LAYER\EnrollmentTable.xaml.cs">
+      <DependentUpon>EnrollmentTable.xaml</DependentUpon>
+    </Compile>
     <Compile Include="UI_LAYER\ProgramTable.xaml.cs">
       <DependentUpon>ProgramTable.xaml</DependentUpon>
     </Compile>
@@ -123,6 +132,18 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="UI_LAYER\CourseTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI_LAYER\EmergencyContactTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="UI_LAYER\EnrollmentTable.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="UI_LAYER\ProgramTable.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
