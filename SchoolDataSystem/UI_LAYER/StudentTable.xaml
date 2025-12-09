@@ -5,9 +5,20 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SchoolDataSystem.UI_LAYER"
         mc:Ignorable="d"
-        ResizeMode="CanMinimize"
+        ResizeMode="NoResize"
         Title="StudentTable" Height="450" Width="800">
     <Grid>
+        <DataGrid  Margin="40,49,250,49">
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Id" Binding="{Binding ID}" Width="Auto" />
+                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*" />
+                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*" />
+                <DataGridTextColumn Header="Address" Binding="{Binding Email}" Width="*" />
+                <DataGridTextColumn Header="Phone Number" Binding="{Binding Email}" Width="1.2*" />
+                <DataGridTextColumn Header="Date of Birth" Binding="{Binding Email}" Width="*" />
+                <DataGridTextColumn Header="ProgramID" Binding="{Binding City}" Width="*" />
+            </DataGrid.Columns>
+        </DataGrid>
         
     </Grid>
 </Window>
