@@ -19,6 +19,26 @@
                 <DataGridTextColumn Header="ProgramID" Binding="{Binding City}" Width="*" />
             </DataGrid.Columns>
         </DataGrid>
-        
+        <Label Content="Student ID" HorizontalAlignment="Left" Margin="569,49,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbStudentID" HorizontalAlignment="Left" Margin="569,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="First Name" HorizontalAlignment="Left" Margin="569,87,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbFirstName" HorizontalAlignment="Left" Margin="569,110,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Last Name" HorizontalAlignment="Left" Margin="568,128,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbLastName" HorizontalAlignment="Left" Margin="569,147,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Address" HorizontalAlignment="Left" Margin="568,165,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.409,0.507"/>
+        <TextBox x:Name="tbAddress" HorizontalAlignment="Left" Margin="570,185,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Phone Number" HorizontalAlignment="Left" Margin="568,199,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbPhoneNumber" HorizontalAlignment="Left" Margin="570,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="Date Of Birth" HorizontalAlignment="Left" Margin="570,240,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbDateBirth" HorizontalAlignment="Left" Margin="570,266,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Label Content="ProgramID" HorizontalAlignment="Left" Margin="570,289,0,0" VerticalAlignment="Top"/>
+        <TextBox x:Name="tbProgramID" HorizontalAlignment="Left" Margin="570,315,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
+        <Button x:Name="BtnBack" Content="Back" HorizontalAlignment="Left" Margin="749,365,0,0" VerticalAlignment="Top" Width="33" Click="BtnBack_Click"/>
+        <Button x:Name="BtnCreate" Content="Create" HorizontalAlignment="Left" Margin="568,365,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="BtnUpdate" Content="Update" HorizontalAlignment="Left" Margin="629,365,0,0" VerticalAlignment="Top"/>
+        <Button x:Name="BtnDelete" Content="Delete" HorizontalAlignment="Left" Margin="693,365,0,0" VerticalAlignment="Top"/>
+
+
+
     </Grid>
 </Window>

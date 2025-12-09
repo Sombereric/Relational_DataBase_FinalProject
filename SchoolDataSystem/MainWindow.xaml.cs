@@ -29,13 +29,17 @@ namespace SchoolDataSystem
         private void btnStudents_Click(object sender, RoutedEventArgs e)
         {
             StudentTable studentTable = new StudentTable();
+            this.Hide();
             studentTable.ShowDialog();
+            this.Show();
         }
 
         private void btnPrograms_Click(object sender, RoutedEventArgs e)
         {
             ProgramTable programWindow = new ProgramTable();
+            this.Hide();
             programWindow.ShowDialog();
+            this.Show();
         }
 
     }
