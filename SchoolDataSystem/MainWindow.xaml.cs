@@ -31,5 +31,12 @@ namespace SchoolDataSystem
             StudentTable studentTable = new StudentTable();
             studentTable.ShowDialog();
         }
+
+        private void btnPrograms_Click(object sender, RoutedEventArgs e)
+        {
+            ProgramTable programWindow = new ProgramTable();
+            programWindow.ShowDialog();
+        }
+
     }
 }
