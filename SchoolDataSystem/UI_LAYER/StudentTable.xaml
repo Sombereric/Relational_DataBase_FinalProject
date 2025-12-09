@@ -8,17 +8,14 @@
         ResizeMode="NoResize"
         Title="StudentTable" Height="450" Width="800">
     <Grid>
-        <DataGrid x:Name="DGStudentList" Margin="40,49,250,49" SelectionChanged="DGStudentList_SelectionChanged">
-            <DataGrid.Columns>
-                <DataGridTextColumn Header="Id" Binding="{Binding ID}" Width="Auto" />
-                <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*" />
-                <DataGridTextColumn Header="Last Name" Binding="{Binding LastName}" Width="*" />
-                <DataGridTextColumn Header="Address" Binding="{Binding Email}" Width="*" />
-                <DataGridTextColumn Header="Phone Number" Binding="{Binding Email}" Width="1.2*" />
-                <DataGridTextColumn Header="Date of Birth" Binding="{Binding Email}" Width="*" />
-                <DataGridTextColumn Header="ProgramID" Binding="{Binding City}" Width="*" />
-            </DataGrid.Columns>
-        </DataGrid>
+        <DataGrid x:Name="DGStudentList" 
+                  Margin="40,49,250,49" 
+                  SelectionChanged="DGStudentList_SelectionChanged"
+                  CanUserAddRows="False"
+                  CanUserDeleteRows="False"
+                  SelectionMode="Single"
+                  IsReadOnly="True"/>
+        
         <Label Content="Student ID" HorizontalAlignment="Left" Margin="569,49,0,0" VerticalAlignment="Top"/>
         <TextBox x:Name="tbStudentID" HorizontalAlignment="Left" Margin="569,69,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="120"/>
         <Label Content="First Name" HorizontalAlignment="Left" Margin="569,87,0,0" VerticalAlignment="Top"/>

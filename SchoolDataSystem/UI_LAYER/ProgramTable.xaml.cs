@@ -25,7 +25,7 @@ namespace SchoolDataSystem.UI_LAYER
     //
     public partial class ProgramTable : Window
     {
-        private string connStr = "Server=localhost;Uid=root;Pwd=root;Database=SchoolDataBase;";
+        private string connStr = "Server=localhost;Uid=root;Pwd=HelloWorld;DataBase=SchoolDataBase;";
         private MySqlDataAdapter adapter;
         private DataSet ds;
 
