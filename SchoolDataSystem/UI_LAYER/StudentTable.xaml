@@ -9,7 +9,7 @@
         Title="StudentTable" Height="450" Width="800">
     <Grid>
         <DataGrid x:Name="DGStudentList" 
-                  Margin="40,49,250,49" 
+                  Margin="40,49,237,49" 
                   SelectionChanged="DGStudentList_SelectionChanged"
                   CanUserAddRows="False"
                   CanUserDeleteRows="False"

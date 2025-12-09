@@ -31,10 +31,13 @@ namespace SchoolDataSystem.UI_LAYER
         public StudentTable()
         {
             InitializeComponent();
-            textBoxDisable();
             BtnDelete.IsEnabled = false;
+            BtnUpdate.IsEnabled = false;
             LoadStudentData();
         }
+        /// <summary>
+        /// Loads the database student table into the program for the user to interact with
+        /// </summary>
         private void LoadStudentData()
         {
             try
@@ -86,36 +89,9 @@ namespace SchoolDataSystem.UI_LAYER
                 tbPhoneNumber.Text = row["PhoneNumber"].ToString();
                 tbDateBirth.Text = row["DateofBirth"].ToString();
                 tbProgramID.Text = row["ProgramId"].ToString();
-                //enables the text boxes for editing
-                textBoxEnable();
+                BtnUpdate.IsEnabled = true;
                 BtnDelete.IsEnabled = true;    
             }
-        }
-        /// <summary>
-        /// disables text boxes on program startup
-        /// </summary>
-        private void textBoxDisable()
-        {
-            tbStudentID.IsEnabled = false;
-            tbFirstName.IsEnabled = false;
-            tbLastName.IsEnabled = false;
-            tbAddress.IsEnabled = false;
-            tbPhoneNumber.IsEnabled = false;
-            tbDateBirth.IsEnabled = false;
-            tbProgramID.IsEnabled = false;
-        }
-        /// <summary>
-        /// enables all text boxes once a data point is filled
-        /// </summary>
-        private void textBoxEnable()
-        {
-            tbStudentID.IsEnabled = true;
-            tbFirstName.IsEnabled = true;
-            tbLastName.IsEnabled = true;
-            tbAddress.IsEnabled = true;
-            tbPhoneNumber.IsEnabled = true;
-            tbDateBirth.IsEnabled = true;
-            tbProgramID.IsEnabled = true;
         }
     }
 }
