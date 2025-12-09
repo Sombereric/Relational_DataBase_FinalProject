@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,6 +28,12 @@ namespace SchoolDataSystem.UI_LAYER
         private void BtnBack_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+
+        private void DGStudentList_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            DataRowView row = (DataRowView)DGStudentList.SelectedItem;
+
         }
     }
 }

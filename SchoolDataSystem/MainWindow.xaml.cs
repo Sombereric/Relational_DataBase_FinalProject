@@ -42,5 +42,9 @@ namespace SchoolDataSystem
             this.Show();
         }
 
+        private void btnExit_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
     }
 }

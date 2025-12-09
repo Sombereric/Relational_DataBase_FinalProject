@@ -8,7 +8,7 @@
         ResizeMode="NoResize"
         Title="StudentTable" Height="450" Width="800">
     <Grid>
-        <DataGrid  Margin="40,49,250,49">
+        <DataGrid x:Name="DGStudentList" Margin="40,49,250,49" SelectionChanged="DGStudentList_SelectionChanged">
             <DataGrid.Columns>
                 <DataGridTextColumn Header="Id" Binding="{Binding ID}" Width="Auto" />
                 <DataGridTextColumn Header="First Name" Binding="{Binding FirstName}" Width="*" />
