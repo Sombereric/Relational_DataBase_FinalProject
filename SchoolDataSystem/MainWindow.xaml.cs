@@ -32,7 +32,7 @@ namespace SchoolDataSystem
             studentTable.ShowDialog();
         }
 
-        private void btnPrograms_Click(object sender, RoutedEventArgs e)
+        private void btnProgram_Click(object sender, RoutedEventArgs e)
         {
             ProgramTable programWindow = new ProgramTable();
             programWindow.ShowDialog();

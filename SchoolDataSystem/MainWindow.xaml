@@ -16,7 +16,7 @@
         <Button x:Name="btnStudents" Content="Students" HorizontalAlignment="Left" Margin="75,158,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15" Click="btnStudents_Click"/>
         <Button x:Name="btnCourses" Content="Courses" HorizontalAlignment="Left" Margin="270,158,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15"/>
         <Button x:Name="btnEmergencyContact" Content="EmergencyContact" HorizontalAlignment="Left" Margin="138,269,0,0" VerticalAlignment="Top" Height="30" Width="145" FontSize="15"/>
-        <Button x:Name="btnProgram" Content="Program" HorizontalAlignment="Left" Margin="270,215,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15"/>
+        <Button x:Name="btnProgram" Content="Program" HorizontalAlignment="Left" Margin="270,215,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15" Click="btnProgram_Click"/>
         <Button x:Name="btnEnrollment" Content="Enrollment" HorizontalAlignment="Left" Margin="75,215,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15"/>
         <Button x:Name="btnExit" Content="Exit" HorizontalAlignment="Left" Margin="270,329,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15"/>
         <Button x:Name="btnAbout" Content="About" HorizontalAlignment="Left" Margin="75,329,0,0" VerticalAlignment="Top" Height="30" Width="77" FontSize="15"/>
