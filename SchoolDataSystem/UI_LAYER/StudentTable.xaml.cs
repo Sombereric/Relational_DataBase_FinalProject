@@ -11,6 +11,7 @@
 
 using System;
 using System.Data;
+using System.Data.Common;
 using System.Windows;
 using System.Windows.Controls;
 using MySql.Data.MySqlClient;
@@ -92,6 +93,96 @@ namespace SchoolDataSystem.UI_LAYER
                 BtnUpdate.IsEnabled = true;
                 BtnDelete.IsEnabled = true;    
             }
+        }
+        /// <summary>
+        /// For creating a new student in the system
+        /// </summary>
+        /// <param name="sender">Object which triggered the event</param>
+        /// <param name="e">Event Arguments</param>
+        private void BtnCreate_Click(object sender, RoutedEventArgs e)
+        {
+            if (!int.TryParse(tbStudentID.Text, out int StudentID))
+            {
+                MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(tbProgramID.Text, out int programID))
+            {
+                MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRow newRow = studentDataSet.Tables["program"].NewRow();
+
+            newRow["StudentID"] = StudentID;
+            newRow["FirstName"] = tbFirstName.Text;
+            newRow["LastName"] = tbLastName.Text;
+            newRow["Address"] = tbAddress.Text;
+            newRow["PhoneNumber"] = tbPhoneNumber.Text;
+            newRow["DateofBirth"] = tbDateBirth.Text;
+            newRow["ProgramId"] = programID;
+
+            studentDataSet.Tables["Student"].Rows.Add(newRow);
+
+            SaveChanges();
+            LoadStudentData();
+        }
+        /// <summary>
+        /// Updates a student within the list
+        /// </summary>
+        /// <param name="sender">Object which triggered the event</param>
+        /// <param name="e">Event Arguments</param>
+        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        {
+            SaveChanges();
+            MessageBox.Show("Updated!");
+            LoadStudentData();
+        }
+        /// <summary>
+        /// Deletes selected student
+        /// </summary>
+        /// <param name="sender">Object which triggered the event</param>
+        /// <param name="e">Event Arguments</param>
+        private void btnDelete_Click(object sender, RoutedEventArgs e)
+        {
+            if (DGStudentList.SelectedItem == null)
+            {
+                MessageBox.Show("Select a row first.");
+                return;
+            }
+
+            // Get selected row and delete it
+            DataRowView selectedDataRowView = (DataRowView)DGStudentList.SelectedItem;
+            selectedDataRowView.Row.Delete();
+
+            SaveChanges();
+            LoadStudentData();
+        }
+        /// <summary>
+        /// Saves all changes from the data base to the server
+        /// </summary>
+        private void SaveChanges()
+        {
+            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            {
+                connection.Open();
+
+                sqlDataAdapter = new MySqlDataAdapter("SELECT * FROM Program", connection);
+
+                // Auto-generate UPDATE / INSERT / DELETE commands
+                MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(sqlDataAdapter);
+
+                sqlDataAdapter.Update(studentDataSet, "program");
+            }
+        }
+        /// <summary>
+        /// Cloeses the wpf to return to main menu
+        /// </summary>
+        /// <param name="sender">Object which triggered the event</param>
+        /// <param name="e">Event Arguments</param>
+        private void btnBack_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
         }
     }
 }
