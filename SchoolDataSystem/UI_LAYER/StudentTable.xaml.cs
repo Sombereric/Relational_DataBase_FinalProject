@@ -112,7 +112,7 @@ namespace SchoolDataSystem.UI_LAYER
                 return;
             }
 
-            DataRow newRow = studentDataSet.Tables["program"].NewRow();
+            DataRow newRow = studentDataSet.Tables["Student"].NewRow();
 
             newRow["StudentID"] = StudentID;
             newRow["FirstName"] = tbFirstName.Text;
@@ -167,12 +167,12 @@ namespace SchoolDataSystem.UI_LAYER
             {
                 connection.Open();
 
-                sqlDataAdapter = new MySqlDataAdapter("SELECT * FROM Program", connection);
+                sqlDataAdapter = new MySqlDataAdapter("SELECT * FROM Student", connection);
 
                 // Auto-generate UPDATE / INSERT / DELETE commands
                 MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(sqlDataAdapter);
 
-                sqlDataAdapter.Update(studentDataSet, "program");
+                sqlDataAdapter.Update(studentDataSet, "Student");
             }
         }
         /// <summary>
