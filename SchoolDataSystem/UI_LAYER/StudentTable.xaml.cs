@@ -153,6 +153,8 @@ namespace SchoolDataSystem.UI_LAYER
             selectedDataRowView["DateofBirth"] = tbDateBirth.Text;
             selectedDataRowView["ProgramId"] = programID;
 
+            DGStudentList.SelectedItem = selectedDataRowView;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadStudentData();
