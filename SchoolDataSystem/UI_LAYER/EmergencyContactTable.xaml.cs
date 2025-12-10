@@ -11,6 +11,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;   // <-- added
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -94,10 +95,39 @@ namespace SchoolDataSystem.UI_LAYER
         //
         // FUNCTION : btnUpdate_Click
         // DESCRIPTION :
-        //   Saves any edits made directly in the DataGrid.
+        //   Updates the selected EmergencyContact row using the values in the text boxes.
         //
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            if (dgContacts.SelectedItem == null)
+            {
+                MessageBox.Show("Select a row first.");
+                return;
+            }
+
+            int contactID;
+            int studentID;
+
+            if (!int.TryParse(txtContactID.Text, out contactID))
+            {
+                MessageBox.Show("Contact ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(txtStudentID.Text, out studentID))
+            {
+                MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgContacts.SelectedItem;
+
+            selectedDataRowView["ContactID"] = contactID;
+            selectedDataRowView["StudentID"] = studentID;
+            selectedDataRowView["ContactName"] = txtContactName.Text;
+            selectedDataRowView["ContactAddress"] = txtContactAddress.Text;
+            selectedDataRowView["ContactPhoneNumber"] = txtContactPhoneNumber.Text;
+            selectedDataRowView["RelationshipToStudent"] = txtRelationshipToStudent.Text;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadContactTable();
@@ -139,6 +169,28 @@ namespace SchoolDataSystem.UI_LAYER
 
                 dataAdapter.Update(dataSet, "emergencyContact");
             }
+        }
+
+        //
+        // FUNCTION : dgContacts_SelectionChanged
+        // DESCRIPTION :
+        //   Copies the selected row values into the text boxes for editing.
+        //
+        private void dgContacts_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgContacts.SelectedItem == null)
+            {
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgContacts.SelectedItem;
+
+            txtContactID.Text = selectedDataRowView["ContactID"].ToString();
+            txtStudentID.Text = selectedDataRowView["StudentID"].ToString();
+            txtContactName.Text = selectedDataRowView["ContactName"].ToString();
+            txtContactAddress.Text = selectedDataRowView["ContactAddress"].ToString();
+            txtContactPhoneNumber.Text = selectedDataRowView["ContactPhoneNumber"].ToString();
+            txtRelationshipToStudent.Text = selectedDataRowView["RelationshipToStudent"].ToString();
         }
 
         //

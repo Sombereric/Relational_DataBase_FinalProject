@@ -11,8 +11,12 @@
         </Grid.ColumnDefinitions>
 
         <DataGrid x:Name="dgContacts"
-                  AutoGenerateColumns="True"
-                  Grid.Column="0" />
+          Grid.Column="0"
+          AutoGenerateColumns="True"
+          Margin="0,0,10,0"
+          IsReadOnly="True"
+          SelectionChanged="dgContacts_SelectionChanged" />
+
 
         <StackPanel Grid.Column="1" Margin="10">
 

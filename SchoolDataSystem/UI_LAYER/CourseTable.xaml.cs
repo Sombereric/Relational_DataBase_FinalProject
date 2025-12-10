@@ -13,6 +13,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;   // <--- added
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -94,10 +95,37 @@ namespace SchoolDataSystem.UI_LAYER
         //
         // FUNCTION : btnUpdate_Click
         // DESCRIPTION :
-        //   Saves any edits made directly in the DataGrid.
+        //   Updates the selected Course row using the values in the text boxes.
         //
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            if (dgCourses.SelectedItem == null)
+            {
+                MessageBox.Show("Select a row first.");
+                return;
+            }
+
+            int courseID;
+            int sectionValue;
+
+            if (!int.TryParse(txtCourseID.Text, out courseID))
+            {
+                MessageBox.Show("Course ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            if (!int.TryParse(txtSection.Text, out sectionValue))
+            {
+                MessageBox.Show("Section must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgCourses.SelectedItem;
+
+            selectedDataRowView["CourseID"] = courseID;
+            selectedDataRowView["Section"] = sectionValue;
+            selectedDataRowView["CourseName"] = txtCourseName.Text;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadCourseTable();
@@ -139,6 +167,25 @@ namespace SchoolDataSystem.UI_LAYER
 
                 dataAdapter.Update(dataSet, "course");
             }
+        }
+
+        //
+        // FUNCTION : dgCourses_SelectionChanged
+        // DESCRIPTION :
+        //   Copies the selected row values into the text boxes for editing.
+        //
+        private void dgCourses_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgCourses.SelectedItem == null)
+            {
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgCourses.SelectedItem;
+
+            txtCourseID.Text = selectedDataRowView["CourseID"].ToString();
+            txtSection.Text = selectedDataRowView["Section"].ToString();
+            txtCourseName.Text = selectedDataRowView["CourseName"].ToString();
         }
 
         //
