@@ -12,6 +12,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -112,10 +113,56 @@ namespace SchoolDataSystem.UI_LAYER
         //
         // FUNCTION : btnUpdate_Click
         // DESCRIPTION :
-        //   Saves any edits made directly in the DataGrid.
+        //   Updates the selected Enrollment row using the values in the text boxes.
         //
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            if (dgEnrollments.SelectedItem == null)
+            {
+                MessageBox.Show("Select a row first.");
+                return;
+            }
+
+            int enrollmentID;
+            int studentID;
+            int courseID;
+            int termValue;
+            int gradeValue;
+
+            if (!int.TryParse(txtEnrollmentID.Text, out enrollmentID))
+            {
+                MessageBox.Show("Enrollment ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(txtStudentID.Text, out studentID))
+            {
+                MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(txtCourseID.Text, out courseID))
+            {
+                MessageBox.Show("Course ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(txtTerm.Text, out termValue))
+            {
+                MessageBox.Show("Term must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(txtGrade.Text, out gradeValue))
+            {
+                MessageBox.Show("Grade must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgEnrollments.SelectedItem;
+
+            selectedDataRowView["EnrollmentID"] = enrollmentID;
+            selectedDataRowView["StudentID"] = studentID;
+            selectedDataRowView["CourseID"] = courseID;
+            selectedDataRowView["Term"] = termValue;
+            selectedDataRowView["Grade"] = gradeValue;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadEnrollmentTable();
@@ -160,9 +207,30 @@ namespace SchoolDataSystem.UI_LAYER
         }
 
         //
+        // FUNCTION : dgEnrollments_SelectionChanged
+        // DESCRIPTION :
+        //   Copies the selected row values into the text boxes for editing.
+        //
+        private void dgEnrollments_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgEnrollments.SelectedItem == null)
+            {
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgEnrollments.SelectedItem;
+
+            txtEnrollmentID.Text = selectedDataRowView["EnrollmentID"].ToString();
+            txtStudentID.Text = selectedDataRowView["StudentID"].ToString();
+            txtCourseID.Text = selectedDataRowView["CourseID"].ToString();
+            txtTerm.Text = selectedDataRowView["Term"].ToString();
+            txtGrade.Text = selectedDataRowView["Grade"].ToString();
+        }
+
+        //
         // FUNCTION : btnBack_Click
         // DESCRIPTION :
-        //   Closes this window.
+        //   Closes this window and returns to the previous screen.
         //
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {

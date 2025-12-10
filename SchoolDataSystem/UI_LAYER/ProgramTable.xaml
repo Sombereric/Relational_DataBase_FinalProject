@@ -11,9 +11,12 @@
         </Grid.ColumnDefinitions>
 
       
-        <DataGrid x:Name="dgPrograms"
-                  AutoGenerateColumns="True"
-                  Grid.Column="0" />
+       <DataGrid x:Name="dgPrograms"
+          AutoGenerateColumns="True"
+          Grid.Column="0"
+          IsReadOnly="True"
+          SelectionChanged="dgPrograms_SelectionChanged" />
+
         
         <StackPanel Grid.Column="1" Margin="10">
 

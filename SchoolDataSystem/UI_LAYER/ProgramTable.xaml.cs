@@ -13,6 +13,7 @@
 using MySql.Data.MySqlClient;
 using System.Data;
 using System.Windows;
+using System.Windows.Controls;  
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -33,8 +34,6 @@ namespace SchoolDataSystem.UI_LAYER
         // FUNCTION : ProgramTable (constructor)
         // DESCRIPTION :
         //   Initializes the UI and loads all Program records on startup.
-        // PARAMETERS : none
-        // RETURNS    : nothing
         //
         public ProgramTable()
         {
@@ -47,8 +46,6 @@ namespace SchoolDataSystem.UI_LAYER
         // DESCRIPTION :
         //   Reads all rows from the Program table and displays them
         //   inside the DataGrid.
-        // PARAMETERS : none
-        // RETURNS    : nothing
         //
         private void LoadProgramTable()
         {
@@ -73,10 +70,6 @@ namespace SchoolDataSystem.UI_LAYER
         // DESCRIPTION :
         //   Creates a new Program row using user input and saves it
         //   to the database.
-        // PARAMETERS :
-        //   object sender : event source
-        //   RoutedEventArgs e : event arguments
-        // RETURNS : nothing
         //
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
@@ -103,14 +96,29 @@ namespace SchoolDataSystem.UI_LAYER
         //
         // FUNCTION : btnUpdate_Click
         // DESCRIPTION :
-        //   Saves all changes made directly inside the DataGrid.
-        // PARAMETERS :
-        //   object sender : event source
-        //   RoutedEventArgs e : event arguments
-        // RETURNS : nothing
+        //   Updates the selected Program row using the values in the text boxes.
         //
         private void btnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            if (dgPrograms.SelectedItem == null)
+            {
+                MessageBox.Show("Select a row first.");
+                return;
+            }
+
+            int programID;
+            if (!int.TryParse(txtProgramID.Text, out programID))
+            {
+                MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgPrograms.SelectedItem;
+
+            selectedDataRowView["ProgramID"] = programID;
+            selectedDataRowView["ProgramName"] = txtProgramName.Text;
+            selectedDataRowView["ProgramType"] = txtProgramType.Text;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadProgramTable();
@@ -121,10 +129,6 @@ namespace SchoolDataSystem.UI_LAYER
         // DESCRIPTION :
         //   Deletes the selected Program row from both the DataGrid
         //   and the database.
-        // PARAMETERS :
-        //   object sender : event source
-        //   RoutedEventArgs e : event arguments
-        // RETURNS : nothing
         //
         private void btnDelete_Click(object sender, RoutedEventArgs e)
         {
@@ -148,8 +152,6 @@ namespace SchoolDataSystem.UI_LAYER
         //   Sends INSERT, UPDATE, and DELETE commands generated
         //   automatically by MySqlCommandBuilder to persist changes
         //   in the Program table.
-        // PARAMETERS : none
-        // RETURNS    : nothing
         //
         private void SaveChanges()
         {
@@ -167,13 +169,28 @@ namespace SchoolDataSystem.UI_LAYER
         }
 
         //
+        // FUNCTION : dgPrograms_SelectionChanged
+        // DESCRIPTION :
+        //   Copies the selected row values into the text boxes for editing.
+        //
+        private void dgPrograms_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (dgPrograms.SelectedItem == null)
+            {
+                return;
+            }
+
+            DataRowView selectedDataRowView = (DataRowView)dgPrograms.SelectedItem;
+
+            txtProgramID.Text = selectedDataRowView["ProgramID"].ToString();
+            txtProgramName.Text = selectedDataRowView["ProgramName"].ToString();
+            txtProgramType.Text = selectedDataRowView["ProgramType"].ToString();
+        }
+
+        //
         // FUNCTION : btnBack_Click
         // DESCRIPTION :
         //   Closes this window and returns to the previous screen.
-        // PARAMETERS :
-        //   object sender : event source
-        //   RoutedEventArgs e : event arguments
-        // RETURNS : nothing
         //
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
