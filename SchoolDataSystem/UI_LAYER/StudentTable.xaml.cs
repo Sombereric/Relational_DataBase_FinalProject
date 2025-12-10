@@ -6,12 +6,9 @@
 // DESCRIPTION : 
 //   Where the STudent data is loaded and available for edit to the user
 //   
-//   
-//
 
 using System;
 using System.Data;
-using System.Data.Common;
 using System.Windows;
 using System.Windows.Controls;
 using MySql.Data.MySqlClient;
@@ -132,8 +129,30 @@ namespace SchoolDataSystem.UI_LAYER
         /// </summary>
         /// <param name="sender">Object which triggered the event</param>
         /// <param name="e">Event Arguments</param>
-        private void btnUpdate_Click(object sender, RoutedEventArgs e)
+        private void BtnUpdate_Click(object sender, RoutedEventArgs e)
         {
+            // Get selected row and delete it
+            DataRowView selectedDataRowView = (DataRowView)DGStudentList.SelectedItem;
+
+            if (!int.TryParse(tbStudentID.Text, out int StudentID))
+            {
+                MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+            if (!int.TryParse(tbProgramID.Text, out int programID))
+            {
+                MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
+            selectedDataRowView["StudentID"] = StudentID;
+            selectedDataRowView["FirstName"] = tbFirstName.Text;
+            selectedDataRowView["LastName"] = tbLastName.Text;
+            selectedDataRowView["Address"] = tbAddress.Text;
+            selectedDataRowView["PhoneNumber"] = tbPhoneNumber.Text;
+            selectedDataRowView["DateofBirth"] = tbDateBirth.Text;
+            selectedDataRowView["ProgramId"] = programID;
+
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadStudentData();
@@ -163,17 +182,25 @@ namespace SchoolDataSystem.UI_LAYER
         /// </summary>
         private void SaveChanges()
         {
-            using (MySqlConnection connection = new MySqlConnection(connectionString))
+            try
             {
-                connection.Open();
+                using (MySqlConnection connection = new MySqlConnection(connectionString))
+                {
+                    connection.Open();
 
-                sqlDataAdapter = new MySqlDataAdapter("SELECT * FROM Student", connection);
+                    sqlDataAdapter = new MySqlDataAdapter("SELECT * FROM Student", connection);
 
-                // Auto-generate UPDATE / INSERT / DELETE commands
-                MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(sqlDataAdapter);
+                    // Auto-generate UPDATE / INSERT / DELETE commands
+                    MySqlCommandBuilder commandBuilder = new MySqlCommandBuilder(sqlDataAdapter);
 
-                sqlDataAdapter.Update(studentDataSet, "Student");
+                    sqlDataAdapter.Update(studentDataSet, "Student");
+                }
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Error Saving data: " + ex.Message);
+            }
+            
         }
         /// <summary>
         /// Cloeses the wpf to return to main menu
