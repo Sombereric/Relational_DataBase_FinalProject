@@ -5,76 +5,77 @@ USE SchoolDataBase;
 
 -- creation of each table 
 CREATE TABLE Program(
-	ProgramID INT NOT NULL,
+    ProgramID INT NOT NULL,
     ProgramName VARCHAR(32),
-    ProgramType VARCHAR(32)
+    ProgramType VARCHAR(32),
+    PRIMARY KEY (ProgramID)
 );
 
 CREATE TABLE Student(
-	StudentID INT NOT NULL,
+    StudentID INT NOT NULL,
     FirstName VARCHAR(32),
     LastName VARCHAR(32),
     Address VARCHAR(32),
     PhoneNumber INT,
     DateOfBirth VARCHAR(32),
-    ProgramID INT NOT NULL
+    ProgramID INT NOT NULL,
+    PRIMARY KEY (StudentID)
 );
 
 CREATE TABLE EmergencyContact(
-	ContactID INT NOT NULL,
+    ContactID INT NOT NULL,
     StudentID INT NOT NULL,
     ContactName VARCHAR(32),
     ContactAddress VARCHAR(32),
     ContactPhoneNumber VARCHAR(32),
-    RelationshipToStudent VARCHAR(32)
-);
-
-CREATE TABLE Enrollment(
-	EnrollmentID INT NOT NULL,
-    StudentID INT NOT NULL,
-    CourseID INT NOT NULL, 
-    Term INT,
-    Grade INT
+    RelationshipToStudent VARCHAR(32),
+    PRIMARY KEY (ContactID)
 );
 
 CREATE TABLE Course(
-	CourseID INT NOT NULL,
+    CourseID INT NOT NULL,
     Section INT,
-    CourseName VARCHAR(32)
+    CourseName VARCHAR(32),
+    PRIMARY KEY (CourseID)
 );
 
--- All Primary key creations
-ALTER TABLE Program
-ADD PRIMARY KEY (ProgramID);
+CREATE TABLE Enrollment(
+    EnrollmentID INT NOT NULL,
+    StudentID INT NOT NULL,
+    CourseID INT NOT NULL,
+    Term INT,
+    Grade INT,
+    PRIMARY KEY (EnrollmentID)
+);
 
-ALTER TABLE Student
-ADD PRIMARY KEY (StudentID);
+-- Foreign keys with cascading deletes (and cascading updates)
+ALTER TABLE Enrollment
+  ADD CONSTRAINT fk_enrollment_student
+    FOREIGN KEY (StudentID)
+    REFERENCES Student(StudentID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
+
+ALTER TABLE Enrollment
+  ADD CONSTRAINT fk_enrollment_course
+    FOREIGN KEY (CourseID)
+    REFERENCES Course(CourseID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 ALTER TABLE EmergencyContact
-ADD PRIMARY KEY (ContactID);
-
-ALTER TABLE Course
-ADD PRIMARY KEY (CourseId);
-
-ALTER TABLE Enrollment
-ADD PRIMARY KEY (EnrollmentID);
-
--- All Foreign Key creations to connect all tables to one another
-ALTER TABLE Enrollment
-ADD FOREIGN KEY (StudentID)
-REFERENCES Student(StudentID);
-
-ALTER TABLE Enrollment
-ADD FOREIGN KEY (CourseId)
-REFERENCES Course(CourseID);
-
-ALTER TABLE EmergencyContact
-ADD FOREIGN KEY (StudentID)
-REFERENCES Student(StudentID);
+  ADD CONSTRAINT fk_emergencycontact_student
+    FOREIGN KEY (StudentID)
+    REFERENCES Student(StudentID)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE;
 
 ALTER TABLE Student
-ADD foreign key (ProgramID)
-REFERENCES Program(ProgramID);
+  ADD CONSTRAINT fk_student_program
+    FOREIGN KEY (ProgramID)
+    REFERENCES Program(ProgramID)
+    ON DELETE RESTRICT    -- prevents deleting a program while students exist
+    ON UPDATE CASCADE;
 
 -- This is where the test data created
 
