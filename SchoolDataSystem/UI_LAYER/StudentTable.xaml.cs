@@ -34,6 +34,7 @@ namespace SchoolDataSystem.UI_LAYER
             InitializeComponent();
             BtnDelete.IsEnabled = false;
             BtnUpdate.IsEnabled = false;
+            tbStudentID.IsEnabled = false;
             LoadStudentData();
         }
         /// <summary>
@@ -101,11 +102,6 @@ namespace SchoolDataSystem.UI_LAYER
         /// <param name="e">Event Arguments</param>
         private void BtnCreate_Click(object sender, RoutedEventArgs e)
         {
-            if (!int.TryParse(tbStudentID.Text, out int StudentID))
-            {
-                MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
             if (!int.TryParse(tbProgramID.Text, out int programID))
             {
                 MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
@@ -114,7 +110,7 @@ namespace SchoolDataSystem.UI_LAYER
 
             DataRow newRow = studentDataSet.Tables["Student"].NewRow();
 
-            newRow["StudentID"] = StudentID;
+            newRow["StudentID"] = studentIDGenerator();
             newRow["FirstName"] = tbFirstName.Text;
             newRow["LastName"] = tbLastName.Text;
             newRow["Address"] = tbAddress.Text;
@@ -145,11 +141,6 @@ namespace SchoolDataSystem.UI_LAYER
             if (!int.TryParse(tbProgramID.Text, out int programID))
             {
                 MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
-
-            if (!LoadAllStudentID(StudentID))
-            {
                 return;
             }
 
@@ -230,14 +221,11 @@ namespace SchoolDataSystem.UI_LAYER
             this.Close();
         }
         /// <summary>
-        /// checks if the student id is unique
+        /// generates a unqiue student id
         /// </summary>
-        /// <param name="studentIDInput">the id to check</param>
-        /// <returns>the validator state</returns>
-        private Boolean LoadAllStudentID(int studentIDInput)
+        /// <returns>The student id</returns>
+        private int studentIDGenerator()
         {
-            //validation state
-            Boolean validationPass = true;
             //starting studentID
             int suggestedValue = 101;
             List<int> StudentIDS = new List<int>();
@@ -263,25 +251,13 @@ namespace SchoolDataSystem.UI_LAYER
             //where it checks if the studentID is unqiue while also keeping a suggested id open
             foreach (int id in StudentIDS)
             {
-                if (id != studentIDInput && validationPass == true)
-                {
-                    validationPass = true;
-                }
-                else
-                {
-                    validationPass = false;
-                }
                 if (id == suggestedValue)
                 {
                     suggestedValue++;
                 }
             }
 
-            if (!validationPass)
-            {
-                MessageBox.Show("Please use a unqiue Student ID, suggested: " + suggestedValue.ToString());
-            }
-            return validationPass;
+            return suggestedValue;
         }
         /// <summary>
         /// Where it checks if the program id exists
@@ -314,7 +290,7 @@ namespace SchoolDataSystem.UI_LAYER
             {
                 if (id == programIDInput)
                 {
-                    validationPass = true;
+                    return true;
                 }
                 else
                 {
