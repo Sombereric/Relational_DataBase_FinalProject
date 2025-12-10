@@ -1,0 +1,53 @@
+﻿<Window x:Class="SchoolDataSystem.UI_LAYER.EmergencyContactTable"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        Title="Emergency Contact Table" Height="400" Width="700"
+        WindowStartupLocation="CenterScreen">
+
+    <Grid Margin="10">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <DataGrid x:Name="dgContacts"
+          Grid.Column="0"
+          AutoGenerateColumns="True"
+          Margin="0,0,10,0"
+          IsReadOnly="True"
+          SelectionMode="Single"
+          SelectionChanged="dgContacts_SelectionChanged" />
+
+
+        <StackPanel Grid.Column="1" Margin="10">
+
+            <TextBlock Text="Contact ID" />
+            <TextBox x:Name="txtContactID" />
+
+            <TextBlock Text="Student ID" />
+            <TextBox x:Name="txtStudentID" />
+
+            <TextBlock Text="Contact Name" />
+            <TextBox x:Name="txtContactName" />
+
+            <TextBlock Text="Contact Address" />
+            <TextBox x:Name="txtContactAddress" />
+
+            <TextBlock Text="Contact Phone Number" />
+            <TextBox x:Name="txtContactPhoneNumber" />
+
+            <TextBlock Text="Relationship To Student" />
+            <TextBox x:Name="txtRelationshipToStudent" />
+
+            <StackPanel Orientation="Horizontal" Margin="0,20,0,0" HorizontalAlignment="Center">
+                <Button Content="Create" Width="80" Margin="5" Click="btnCreate_Click"/>
+                <Button Content="Update" Width="80" Margin="5" Click="btnUpdate_Click"/>
+                <Button Content="Delete" Width="80" Margin="5" Click="btnDelete_Click"/>
+            </StackPanel>
+
+            <Button Content="Back" Width="80" HorizontalAlignment="Center" Margin="10"
+                    Click="btnBack_Click"/>
+        </StackPanel>
+
+    </Grid>
+</Window>
