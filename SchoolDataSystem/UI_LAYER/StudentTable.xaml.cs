@@ -8,10 +8,13 @@
 //   
 
 using System;
+using System.Collections.Generic;
 using System.Data;
+using System.Data.SqlClient;
 using System.Windows;
 using System.Windows.Controls;
 using MySql.Data.MySqlClient;
+using Org.BouncyCastle.Crypto;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -145,6 +148,17 @@ namespace SchoolDataSystem.UI_LAYER
                 return;
             }
 
+            if (!LoadAllStudentID(StudentID))
+            {
+                return;
+            }
+
+            if (!LoadAllProgramID(programID))
+            {
+                MessageBox.Show("Program ID must be in the system.", "Invalid Input", MessageBoxButton.OK);
+                return;
+            }
+
             selectedDataRowView["StudentID"] = StudentID;
             selectedDataRowView["FirstName"] = tbFirstName.Text;
             selectedDataRowView["LastName"] = tbLastName.Text;
@@ -158,6 +172,8 @@ namespace SchoolDataSystem.UI_LAYER
             SaveChanges();
             MessageBox.Show("Updated!");
             LoadStudentData();
+            BtnUpdate.IsEnabled = false;
+            BtnDelete.IsEnabled = false;
         }
         /// <summary>
         /// Deletes selected student
@@ -212,6 +228,101 @@ namespace SchoolDataSystem.UI_LAYER
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        /// <summary>
+        /// checks if the student id is unique
+        /// </summary>
+        /// <param name="studentIDInput">the id to check</param>
+        /// <returns>the validator state</returns>
+        private Boolean LoadAllStudentID(int studentIDInput)
+        {
+            //validation state
+            Boolean validationPass = true;
+            //starting studentID
+            int suggestedValue = 101;
+            List<int> StudentIDS = new List<int>();
+
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT StudentID FROM Student", sqlConnection);
+
+                using (MySqlDataReader reader = commandSQL.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        StudentIDS.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            StudentIDS.Sort();
+
+            //where it checks if the studentID is unqiue while also keeping a suggested id open
+            foreach (int id in StudentIDS)
+            {
+                if (id != studentIDInput && validationPass == true)
+                {
+                    validationPass = true;
+                }
+                else
+                {
+                    validationPass = false;
+                }
+                if (id == suggestedValue)
+                {
+                    suggestedValue++;
+                }
+            }
+
+            if (!validationPass)
+            {
+                MessageBox.Show("Please use a unqiue Student ID, suggested: " + suggestedValue.ToString());
+            }
+            return validationPass;
+        }
+        /// <summary>
+        /// Where it checks if the program id exists
+        /// </summary>
+        /// <param name="programIDInput">the program id to check</param>
+        /// <returns>returns the state of the validator</returns>
+        private Boolean LoadAllProgramID(int programIDInput)
+        {
+            //stores the state of which the validation is at
+            Boolean validationPass = false;
+            List<int> ProgramIds = new List<int>();
+
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT ProgramID FROM Program", sqlConnection);
+
+                using(MySqlDataReader reader = commandSQL.ExecuteReader()){
+                    while (reader.Read())
+                    {
+                        ProgramIds.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            //where it checks if the program id exists
+            foreach (int id in ProgramIds)
+            {
+                if (id == programIDInput)
+                {
+                    validationPass = true;
+                }
+                else
+                {
+                    validationPass = false;
+                }
+            }
+
+            return validationPass;
         }
     }
 }
