@@ -9,10 +9,11 @@
 //   rows using ADO.NET.
 //
 
-using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;
+using MySql.Data.MySqlClient;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -36,6 +37,7 @@ namespace SchoolDataSystem.UI_LAYER
         {
             InitializeComponent();
             LoadEnrollmentTable();
+            txtEnrollmentID.IsEnabled = false;
         }
 
         //
@@ -64,17 +66,11 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            int enrollmentID;
             int studentID;
             int courseID;
             int termValue;
             int gradeValue;
 
-            if (!int.TryParse(txtEnrollmentID.Text, out enrollmentID))
-            {
-                MessageBox.Show("Enrollment ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
             if (!int.TryParse(txtStudentID.Text, out studentID))
             {
                 MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
@@ -98,7 +94,7 @@ namespace SchoolDataSystem.UI_LAYER
 
             DataRow newRow = dataSet.Tables["enrollment"].NewRow();
 
-            newRow["EnrollmentID"] = enrollmentID;
+            newRow["EnrollmentID"] = EnrollmentIDGenerator();
             newRow["StudentID"] = studentID;
             newRow["CourseID"] = courseID;
             newRow["Term"] = termValue;
@@ -226,7 +222,45 @@ namespace SchoolDataSystem.UI_LAYER
             txtTerm.Text = selectedDataRowView["Term"].ToString();
             txtGrade.Text = selectedDataRowView["Grade"].ToString();
         }
+        /// <summary>
+        /// generates a unqiue enrollment id
+        /// </summary>
+        /// <returns>The enrollment id</returns>
+        private int EnrollmentIDGenerator()
+        {
+            //starting studentID
+            int suggestedValue = 101;
+            List<int> emergencyStudentIDS = new List<int>();
 
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT emergencyid FROM emergencycontact", sqlConnection);
+
+                using (MySqlDataReader reader = commandSQL.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        emergencyStudentIDS.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            emergencyStudentIDS.Sort();
+
+            //where it checks if the studentID is unqiue while also keeping a suggested id open
+            foreach (int id in emergencyStudentIDS)
+            {
+                if (id == suggestedValue)
+                {
+                    suggestedValue++;
+                }
+            }
+
+            return suggestedValue;
+        }
         //
         // FUNCTION : btnBack_Click
         // DESCRIPTION :

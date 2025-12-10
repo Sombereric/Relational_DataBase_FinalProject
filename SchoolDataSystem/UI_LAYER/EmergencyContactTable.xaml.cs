@@ -8,10 +8,11 @@
 //   and lets the user create, edit, and delete rows using ADO.NET.
 //
 
-using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;   // <-- added
+using MySql.Data.MySqlClient;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -35,6 +36,7 @@ namespace SchoolDataSystem.UI_LAYER
         {
             InitializeComponent();
             LoadContactTable();
+            txtContactID.IsEnabled = false;
         }
 
         //
@@ -105,14 +107,8 @@ namespace SchoolDataSystem.UI_LAYER
                 return;
             }
 
-            int contactID;
             int studentID;
 
-            if (!int.TryParse(txtContactID.Text, out contactID))
-            {
-                MessageBox.Show("Contact ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
             if (!int.TryParse(txtStudentID.Text, out studentID))
             {
                 MessageBox.Show("Student ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
@@ -121,7 +117,7 @@ namespace SchoolDataSystem.UI_LAYER
 
             DataRowView selectedDataRowView = (DataRowView)dgContacts.SelectedItem;
 
-            selectedDataRowView["ContactID"] = contactID;
+            selectedDataRowView["ContactID"] = ContactIDGenerator();
             selectedDataRowView["StudentID"] = studentID;
             selectedDataRowView["ContactName"] = txtContactName.Text;
             selectedDataRowView["ContactAddress"] = txtContactAddress.Text;
@@ -192,7 +188,45 @@ namespace SchoolDataSystem.UI_LAYER
             txtContactPhoneNumber.Text = selectedDataRowView["ContactPhoneNumber"].ToString();
             txtRelationshipToStudent.Text = selectedDataRowView["RelationshipToStudent"].ToString();
         }
+        /// <summary>
+        /// generates a unqiue contact id
+        /// </summary>
+        /// <returns>The contact id</returns>
+        private int ContactIDGenerator()
+        {
+            //starting studentID
+            int suggestedValue = 101;
+            List<int> contactIDS = new List<int>();
 
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT contactid FROM emergencycontact", sqlConnection);
+
+                using (MySqlDataReader reader = commandSQL.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        contactIDS.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            contactIDS.Sort();
+
+            //where it checks if the studentID is unqiue while also keeping a suggested id open
+            foreach (int id in contactIDS)
+            {
+                if (id == suggestedValue)
+                {
+                    suggestedValue++;
+                }
+            }
+
+            return suggestedValue;
+        }
         //
         // FUNCTION : btnBack_Click
         // DESCRIPTION :

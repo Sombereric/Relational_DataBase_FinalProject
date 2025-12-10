@@ -10,10 +10,11 @@
 //
 
 
-using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;  
+using MySql.Data.MySqlClient;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -39,6 +40,7 @@ namespace SchoolDataSystem.UI_LAYER
         {
             InitializeComponent();
             LoadProgramTable();
+            txtProgramID.IsEnabled = false;
         }
 
         //
@@ -73,17 +75,9 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            int programID;
-
-            if (!int.TryParse(txtProgramID.Text, out programID))
-            {
-                MessageBox.Show("Program ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
-
             DataRow newRow = dataSet.Tables["program"].NewRow();
 
-            newRow["ProgramID"] = programID;
+            newRow["ProgramID"] = ProgramIDGenerator();
             newRow["ProgramName"] = txtProgramName.Text;
             newRow["ProgramType"] = txtProgramType.Text;
 
@@ -186,7 +180,45 @@ namespace SchoolDataSystem.UI_LAYER
             txtProgramName.Text = selectedDataRowView["ProgramName"].ToString();
             txtProgramType.Text = selectedDataRowView["ProgramType"].ToString();
         }
+        /// <summary>
+        /// generates a unqiue program id
+        /// </summary>
+        /// <returns>The program id</returns>
+        private int ProgramIDGenerator()
+        {
+            //starting studentID
+            int suggestedValue = 101;
+            List<int> programIDS = new List<int>();
 
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT programid FROM program", sqlConnection);
+
+                using (MySqlDataReader reader = commandSQL.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        programIDS.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            programIDS.Sort();
+
+            //where it checks if the studentID is unqiue while also keeping a suggested id open
+            foreach (int id in programIDS)
+            {
+                if (id == suggestedValue)
+                {
+                    suggestedValue++;
+                }
+            }
+
+            return suggestedValue;
+        }
         //
         // FUNCTION : btnBack_Click
         // DESCRIPTION :

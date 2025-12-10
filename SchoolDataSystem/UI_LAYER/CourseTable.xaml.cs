@@ -10,10 +10,11 @@
 //
 
 
-using MySql.Data.MySqlClient;
+using System.Collections.Generic;
 using System.Data;
 using System.Windows;
 using System.Windows.Controls;   // <--- added
+using MySql.Data.MySqlClient;
 
 namespace SchoolDataSystem.UI_LAYER
 {
@@ -37,6 +38,7 @@ namespace SchoolDataSystem.UI_LAYER
         {
             InitializeComponent();
             LoadCourseTable();
+            txtCourseID.IsEnabled = false;
         }
 
         //
@@ -65,14 +67,7 @@ namespace SchoolDataSystem.UI_LAYER
         //
         private void btnCreate_Click(object sender, RoutedEventArgs e)
         {
-            int courseID;
             int sectionValue;
-
-            if (!int.TryParse(txtCourseID.Text, out courseID))
-            {
-                MessageBox.Show("Course ID must be a valid number.", "Invalid Input", MessageBoxButton.OK);
-                return;
-            }
 
             if (!int.TryParse(txtSection.Text, out sectionValue))
             {
@@ -82,7 +77,7 @@ namespace SchoolDataSystem.UI_LAYER
 
             DataRow newRow = dataSet.Tables["course"].NewRow();
 
-            newRow["CourseID"] = courseID;
+            newRow["CourseID"] = CourseIDGenerator();
             newRow["Section"] = sectionValue;
             newRow["CourseName"] = txtCourseName.Text;
 
@@ -196,6 +191,45 @@ namespace SchoolDataSystem.UI_LAYER
         private void btnBack_Click(object sender, RoutedEventArgs e)
         {
             this.Close();
+        }
+        /// <summary>
+        /// generates a unqiue Course id
+        /// </summary>
+        /// <returns>The course id</returns>
+        private int CourseIDGenerator()
+        {
+            //starting studentID
+            int suggestedValue = 101;
+            List<int> StudentIDS = new List<int>();
+
+            //where the data is loaded into the program
+            using (MySqlConnection sqlConnection = new MySqlConnection(connectionString))
+            {
+                sqlConnection.Open();
+
+                MySqlCommand commandSQL = new MySqlCommand("SELECT CourseID FROM Course", sqlConnection);
+
+                using (MySqlDataReader reader = commandSQL.ExecuteReader())
+                {
+                    while (reader.Read())
+                    {
+                        StudentIDS.Add(reader.GetInt32(0));
+                    }
+                }
+            }
+
+            StudentIDS.Sort();
+
+            //where it checks if the studentID is unqiue while also keeping a suggested id open
+            foreach (int id in StudentIDS)
+            {
+                if (id == suggestedValue)
+                {
+                    suggestedValue++;
+                }
+            }
+
+            return suggestedValue;
         }
     }
 }

@@ -17,6 +17,7 @@
           AutoGenerateColumns="True"
           Margin="0,0,10,0"
           IsReadOnly="True"
+          SelectionMode="Single"
           SelectionChanged="dgEnrollments_SelectionChanged" />
 
 
